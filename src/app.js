@@ -690,8 +690,10 @@ function closeInspectorPanel() {
 function wireEvents() {
   els.projectTitle.addEventListener("input", queueSave);
   els.canvasSelect.addEventListener("change", () => {
+    const requestedProjectId = els.canvasSelect.value;
+    if (!requestedProjectId || requestedProjectId === state.id) return;
     saveProject(false);
-    if (loadProject(els.canvasSelect.value)) {
+    if (loadProject(requestedProjectId)) {
       undoStack = [];
       updateUndoButton();
       els.projectTitle.value = state.title;

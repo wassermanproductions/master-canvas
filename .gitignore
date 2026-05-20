@@ -1,6 +1,7 @@
 node_modules/
 dist/
 release/
+storage-backups/
 .DS_Store
 .wrangler/
 __pycache__/

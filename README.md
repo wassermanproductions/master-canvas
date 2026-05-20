@@ -4,6 +4,14 @@ Local-first pre-production canvas for planning AI video projects. Arrange images
 
 Master Canvas ships without bundled demo projects, private media, or sample user assets. New users start with a blank local canvas.
 
+## Preview
+
+These screenshots show an example production board with assets, shot cards, prompts, references, handoff readiness, the movable help key, and the minimap overview. The app itself starts blank for new users.
+
+![Master Canvas board with help key open](docs/screenshots/master-canvas-preview-key.jpeg)
+
+![Master Canvas board with selected shot prompt inspector](docs/screenshots/master-canvas-preview-prompt.jpeg)
+
 ## Features
 
 - Infinite visual canvas with zoom, pan, lasso selection, grouping, and node connections.
@@ -62,7 +70,6 @@ This repository is set up to start from a blank canvas. Demo/private project ass
 
 Recommended before publishing:
 
-- Add screenshots or a short demo GIF.
 - Decide whether packaged releases should be built manually or through GitHub Actions.
 - Keep private project handoff ZIPs out of the repo.
 

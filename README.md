@@ -2,6 +2,8 @@
 
 Local-first pre-production canvas for planning AI video projects. Arrange images, prompts, references, music notes, shot order, and generation handoffs on a visual board.
 
+Developed by Sam Wasserman: [WassermanProductions.com](https://wassermanproductions.com) and [Wasserman.AI](https://wasserman.ai). Released under the MIT License.
+
 Master Canvas ships without bundled demo projects, private media, or sample user assets. New users start with a blank local canvas.
 
 ## Preview

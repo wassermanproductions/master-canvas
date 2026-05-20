@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Local-first pre-production canvas for AI video planning, prompts, assets, and handoff packages.",
   "main": "electron/main.cjs",
+  "author": "Sam Wasserman",
+  "homepage": "https://wasserman.ai",
   "private": false,
   "license": "MIT",
   "scripts": {

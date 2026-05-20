@@ -1,0 +1,13 @@
+node_modules/
+dist/
+release/
+.DS_Store
+.wrangler/
+__pycache__/
+*.pyc
+*.log
+*.zip
+*.dmg
+*.AppImage
+*.exe
+*.app

@@ -1,0 +1,8 @@
+name: master-canvas
+version: 0.1.0
+description: Inspect and prepare Master Canvas handoff packages for generation agents.
+provides_tools:
+  - mastercanvas_capabilities
+  - mastercanvas_inspect_package
+  - mastercanvas_extract_package
+  - mastercanvas_comfy_plan

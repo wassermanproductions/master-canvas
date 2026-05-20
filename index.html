@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A local-first pre-production canvas for arranging media, prompts, and generation workflows."
+    />
+    <title>Master Canvas</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">MC</span>
+          <div>
+            <strong>Master Canvas</strong>
+            <input id="projectTitle" class="project-title" value="Untitled pre-production board" />
+          </div>
+        </div>
+        <div class="top-actions">
+          <select id="canvasSelect" class="canvas-select" aria-label="Saved canvases"></select>
+          <button id="undoBtn" class="button" type="button" title="Undo last canvas change" data-tip="Undo last canvas change" disabled>Undo</button>
+          <button id="newCanvasBtn" class="button" type="button" title="Create a new blank canvas" data-tip="Create a new blank canvas">New Canvas</button>
+          <button id="templatesBtn" class="button" type="button" title="Create from a production template" data-tip="Create from a production template">Templates</button>
+          <button id="continuityBtn" class="button" type="button" title="Open the continuity bible" data-tip="Open the continuity bible">Bible</button>
+          <button id="shotListBtn" class="button" type="button" title="Open shot navigator" data-tip="Open shot navigator">Shots</button>
+          <button id="searchCanvasBtn" class="button" type="button" title="Search canvas cards" data-tip="Search canvas cards">Find</button>
+          <button id="batchEditBtn" class="button" type="button" title="Batch edit selected cards" data-tip="Batch edit selected cards">Batch</button>
+          <button id="versionsBtn" class="button" type="button" title="Save or restore checkpoints" data-tip="Save or restore checkpoints">History</button>
+          <button id="helpBtn" class="button" type="button" title="Open the movable key" data-tip="Open the movable key">Key</button>
+          <button id="saveProjectBtn" class="button primary" type="button" title="Save this canvas locally" data-tip="Save this canvas locally">Save</button>
+          <button id="exportBtn" class="button" type="button" title="Export prompts and project data" data-tip="Export prompts and project data">Export</button>
+          <button id="resetViewBtn" class="icon-button" type="button" title="Fit the whole board into view" data-tip="Fit the whole board into view" aria-label="Fit view">[]</button>
+        </div>
+      </header>
+
+      <aside class="toolrail" aria-label="Canvas tools">
+        <button class="tool-button is-active" type="button" data-tool="select" title="Cursor mode: select, lasso, connect, and move cards" data-tip="Cursor mode: select, lasso, connect, and move cards" aria-label="Cursor Mode">
+          <svg class="tool-icon cursor-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 3l12.5 11.2-6.1.7-2.9 5.4L5 3z" />
+            <path d="M12.2 14.8 16 21" />
+          </svg>
+        </button>
+        <button class="tool-button" type="button" data-tool="hand" title="Hand mode: pan around the canvas without selecting cards" data-tip="Hand mode: pan around the canvas without selecting cards" aria-label="Hand Mode">
+          <svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 11V5.5a1.5 1.5 0 0 1 3 0V11" />
+            <path d="M11 11V4.5a1.5 1.5 0 0 1 3 0V11" />
+            <path d="M14 11V6.5a1.5 1.5 0 0 1 3 0V13" />
+            <path d="M8 11.5 6.7 10a1.55 1.55 0 0 0-2.25-.1 1.55 1.55 0 0 0-.1 2.15l4.15 5.1A6 6 0 0 0 13.2 19H15a5 5 0 0 0 5-5v-2.5a1.5 1.5 0 0 0-3 0V13" />
+          </svg>
+        </button>
+        <button class="tool-button" type="button" data-add="workflow" title="Add an Image to Video workflow card" data-tip="Add an Image to Video workflow card" aria-label="Image to Video">V</button>
+        <button class="tool-button" type="button" data-add="imageWorkflow" title="Add a Generate Image workflow card" data-tip="Add a Generate Image workflow card" aria-label="Generate Image">I</button>
+        <button class="tool-button" type="button" data-add="shot" title="Add a shot card" data-tip="Add a shot card" aria-label="Shot Card">S</button>
+        <button class="tool-button" type="button" data-add="character" title="Add a character reference card" data-tip="Add a character reference card" aria-label="Character Ref">C</button>
+        <button class="tool-button" type="button" data-add="scene" title="Add a scene reference card" data-tip="Add a scene reference card" aria-label="Scene Ref">R</button>
+        <button class="tool-button" type="button" data-add="section" title="Add a movable scene section frame" data-tip="Add a movable scene section frame" aria-label="Section Frame">G</button>
+        <button class="tool-button" type="button" data-add="placeholder" title="Add a missing asset placeholder" data-tip="Add a missing asset placeholder" aria-label="Placeholder">P</button>
+        <button class="tool-button" type="button" data-add="inspiration" title="Add an inspiration / prompt fragment card" data-tip="Add an inspiration / prompt fragment card" aria-label="Inspiration">N</button>
+        <button class="tool-button" type="button" data-add="styleRef" title="Add a video style/tone reference area" data-tip="Add a video style/tone reference area" aria-label="Style References">Y</button>
+        <button class="tool-button" type="button" data-add="musicRef" title="Add a music/audio reference area" data-tip="Add a music/audio reference area" aria-label="Music References">M</button>
+        <button class="tool-button" type="button" data-add="note" title="Add a text note" data-tip="Add a text note" aria-label="Text Note">T</button>
+        <button id="addReferenceBtn" class="tool-button" type="button" title="Add a video, music, or general reference link" data-tip="Add a video, music, or general reference link" aria-label="Add Link Reference">L</button>
+        <button id="openFileBtn" class="tool-button" type="button" title="Upload image, video, or audio files" data-tip="Upload image, video, or audio files" aria-label="Upload">U</button>
+        <input id="fileInput" type="file" accept="image/*,video/*,audio/*" multiple hidden />
+        <input id="nodeFileInput" type="file" accept="video/*,audio/*" hidden />
+      </aside>
+
+      <aside id="assetDrawer" class="asset-drawer" aria-label="Assets">
+        <div class="panel-head">
+          <div>
+            <h2>Assets</h2>
+            <span id="assetCount">0 items</span>
+          </div>
+          <button id="toggleArchivedBtn" class="icon-button" type="button" title="Show archived assets" data-tip="Show archived assets" aria-label="Archived">AR</button>
+        </div>
+        <div class="asset-controls">
+          <input id="assetSearch" type="search" placeholder="Search assets" />
+          <button id="assetSizeBtn" class="button compact" type="button" title="Change asset card size" data-tip="Change asset card size">Size: M</button>
+          <button id="showInboxBtn" class="button compact" type="button" title="Show unsorted inbox assets" data-tip="Show unsorted inbox assets">Inbox</button>
+          <button id="showFavoritesBtn" class="button compact" type="button" title="Show favorite assets only" data-tip="Show favorite assets only">Favorites</button>
+        </div>
+        <div id="assetTypeFilters" class="asset-type-filters" aria-label="Asset type filters">
+          <button class="asset-filter-button is-active" type="button" data-asset-filter="all" title="Show all assets" data-tip="Show all assets">All</button>
+          <button class="asset-filter-button" type="button" data-asset-filter="storyboard" title="Show storyboard image assets" data-tip="Show storyboard image assets">Storyboard Images</button>
+          <button class="asset-filter-button" type="button" data-asset-filter="video" title="Show video generation files" data-tip="Show video generation files">Video Generations</button>
+          <button class="asset-filter-button" type="button" data-asset-filter="music" title="Show music and audio references" data-tip="Show music and audio references">Music</button>
+          <button class="asset-filter-button" type="button" data-asset-filter="style" title="Show visual style references" data-tip="Show visual style references">Style References</button>
+        </div>
+        <div id="assetGrid" class="asset-grid"></div>
+      </aside>
+      <div id="assetResizeHandle" class="resize-handle asset-resize-handle" role="separator" aria-label="Resize assets panel" title="Drag to resize assets panel" data-tip="Drag to resize assets panel"></div>
+
+      <main id="canvasViewport" class="canvas-viewport" aria-label="Infinite canvas">
+        <div id="canvasWorld" class="canvas-world">
+          <svg id="linkLayer" class="link-layer" aria-hidden="true"></svg>
+          <div id="nodeLayer" class="node-layer"></div>
+        </div>
+        <div id="lassoBox" class="lasso-box" hidden></div>
+        <button id="minimap" class="minimap" type="button" title="Click to jump around the canvas" data-tip="Click to jump around the canvas" aria-label="Canvas overview">
+          <span>Overview</span>
+          <svg id="minimapSvg" viewBox="0 0 180 180" aria-hidden="true"></svg>
+        </button>
+      </main>
+
+      <aside id="inspector" class="inspector" aria-label="Inspector"></aside>
+      <div id="inspectorResizeHandle" class="resize-handle inspector-resize-handle" role="separator" aria-label="Resize inspector panel" title="Drag to resize inspector panel" data-tip="Drag to resize inspector panel"></div>
+
+      <section id="shotListPanel" class="floating-panel shot-list-panel is-hidden" role="dialog" aria-label="Shot navigator">
+        <div class="floating-panel-head">
+          <div>
+            <h2>Shot Navigator</h2>
+            <span>Jump around sections, scenes, shots, and workflows</span>
+          </div>
+          <button id="shotListCloseBtn" class="icon-button" type="button" title="Close shot navigator" data-tip="Close shot navigator" aria-label="Close shot navigator">X</button>
+        </div>
+        <div id="shotListContent" class="shot-list-content"></div>
+      </section>
+
+      <section id="searchPanel" class="floating-panel search-panel is-hidden" role="dialog" aria-label="Search canvas">
+        <div class="floating-panel-head">
+          <div>
+            <h2>Find Cards</h2>
+            <span>Highlight matching cards on the canvas</span>
+          </div>
+          <button id="searchCloseBtn" class="icon-button" type="button" title="Close search" data-tip="Close search" aria-label="Close search">X</button>
+        </div>
+        <div class="floating-panel-body">
+          <input id="canvasSearchInput" type="search" placeholder="Search title, notes, tags, prompts..." />
+          <button id="clearCanvasSearchBtn" class="button" type="button">Clear Search</button>
+        </div>
+      </section>
+
+      <dialog id="exportDialog" class="export-dialog">
+        <form method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Export</h2>
+              <span>Prompt package and project JSON</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close export" data-tip="Close export" aria-label="Close">X</button>
+          </div>
+          <textarea id="exportText" readonly></textarea>
+          <div class="dialog-actions">
+            <button id="downloadMarkdownBtn" class="button primary" type="button" title="Download the prompt package as Markdown" data-tip="Download the prompt package as Markdown">Download Markdown</button>
+            <button id="downloadStoryboardBtn" class="button" type="button" title="Download a visual storyboard handoff HTML" data-tip="Download a visual storyboard handoff HTML">Download Storyboard HTML</button>
+            <button id="downloadStoryboardPdfBtn" class="button" type="button" title="Download a visual storyboard handoff PDF" data-tip="Download a visual storyboard handoff PDF">Download Storyboard PDF</button>
+            <button id="downloadJsonBtn" class="button" type="button" title="Download the full project as JSON" data-tip="Download the full project as JSON">Download JSON</button>
+            <button id="downloadHandoffZipBtn" class="button" type="button" title="Download Hermes, ComfyUI, Kling, and Veo handoff package" data-tip="Download Hermes, ComfyUI, Kling, and Veo handoff package">Download Handoff ZIP</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="continuityDialog" class="export-dialog compact-dialog">
+        <form method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Continuity Bible</h2>
+              <span>Character, location, prop, and style rules that must stay consistent.</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close continuity bible" data-tip="Close continuity bible" aria-label="Close">X</button>
+          </div>
+          <div class="inspector-section">
+            <div class="field">
+              <label>Characters</label>
+              <textarea id="continuityCharacters" placeholder="Names, face notes, wardrobe, performance, identity rules."></textarea>
+            </div>
+            <div class="field">
+              <label>Wardrobe / Look</label>
+              <textarea id="continuityWardrobe" placeholder="Outfits, grooming, colors, continuity details."></textarea>
+            </div>
+            <div class="field">
+              <label>Locations</label>
+              <textarea id="continuityLocations" placeholder="Places, geography, lighting, layout, era, weather."></textarea>
+            </div>
+            <div class="field">
+              <label>Props / Objects</label>
+              <textarea id="continuityProps" placeholder="Important objects, placements, object identity rules."></textarea>
+            </div>
+            <div class="field">
+              <label>Style Rules</label>
+              <textarea id="continuityStyleRules" placeholder="Camera, color, lens, edit, aspect, grain, pacing rules."></textarea>
+            </div>
+            <div class="field">
+              <label>Never Change</label>
+              <textarea id="continuityNeverChange" placeholder="Anything that must not drift between scenes."></textarea>
+            </div>
+          </div>
+          <div class="dialog-actions">
+            <button class="button" value="close" type="submit">Cancel</button>
+            <button id="saveContinuityBtn" class="button primary" type="button">Save Bible</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="templatesDialog" class="export-dialog compact-dialog">
+        <form method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Template Canvases</h2>
+              <span>Create a new saved canvas with starter sections, placeholders, and workflow cards.</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close templates" data-tip="Close templates" aria-label="Close">X</button>
+          </div>
+          <div id="templatesList" class="template-list"></div>
+        </form>
+      </dialog>
+
+      <dialog id="batchDialog" class="export-dialog compact-dialog">
+        <form method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Batch Edit</h2>
+              <span id="batchCountLabel">Selected cards</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close batch edit" data-tip="Close batch edit" aria-label="Close">X</button>
+          </div>
+          <div class="inspector-section">
+            <div class="field">
+              <label>Status</label>
+              <select id="batchStatus">
+                <option value="">Keep current</option>
+                <option value="draft">draft</option>
+                <option value="ready">ready</option>
+                <option value="review">review</option>
+                <option value="approved">approved</option>
+                <option value="blocked">blocked</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Add Tags</label>
+              <input id="batchTags" placeholder="client-review, hero, missing-audio" />
+            </div>
+          </div>
+          <div class="dialog-actions">
+            <button class="button" value="close" type="submit">Cancel</button>
+            <button id="applyBatchBtn" class="button primary" type="button">Apply to Selection</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="versionsDialog" class="export-dialog compact-dialog">
+        <form method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Checkpoints</h2>
+              <span>Save named versions before major edits</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close checkpoints" data-tip="Close checkpoints" aria-label="Close">X</button>
+          </div>
+          <div class="inspector-section">
+            <div class="field">
+              <label>Checkpoint Name</label>
+              <input id="versionName" placeholder="Client handoff v1" />
+            </div>
+            <button id="saveVersionBtn" class="button primary" type="button">Save Checkpoint</button>
+          </div>
+          <div id="versionsList" class="versions-list"></div>
+        </form>
+      </dialog>
+
+      <dialog id="referenceDialog" class="export-dialog">
+        <form id="referenceForm" method="dialog" class="dialog-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Add Reference Link</h2>
+              <span>Save video, music, or tone references to this canvas</span>
+            </div>
+            <button class="icon-button" value="close" type="submit" title="Close reference dialog" data-tip="Close reference dialog" aria-label="Close">X</button>
+          </div>
+          <div class="inspector-section">
+            <div class="field">
+              <label>Reference Type</label>
+              <select id="referenceType">
+                <option value="video-link">Video style / tone</option>
+                <option value="music-link">Music reference</option>
+                <option value="reference-link">General reference</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Title</label>
+              <input id="referenceTitle" placeholder="Reference title" />
+            </div>
+            <div class="field">
+              <label>URL</label>
+              <input id="referenceUrl" type="url" placeholder="https://..." />
+            </div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea id="referenceNotes" placeholder="What should this influence? Tone, pacing, camera, music direction, etc."></textarea>
+            </div>
+          </div>
+          <div class="dialog-actions">
+            <button class="button" value="close" type="submit" title="Cancel without adding a reference" data-tip="Cancel without adding a reference">Cancel</button>
+            <button id="saveReferenceBtn" class="button primary" type="button" title="Add this reference to the canvas" data-tip="Add this reference to the canvas">Add Reference</button>
+          </div>
+        </form>
+      </dialog>
+
+      <section id="helpPanel" class="help-panel is-hidden" role="dialog" aria-labelledby="helpPanelTitle" aria-label="Master Canvas Key">
+        <div class="dialog-panel">
+          <div id="helpDragHandle" class="panel-head help-drag-handle" title="Drag to move the key">
+            <div>
+              <h2 id="helpPanelTitle">Master Canvas Key</h2>
+              <span>Buttons, cards, and canvas controls</span>
+            </div>
+            <button id="helpCloseBtn" class="icon-button" type="button" title="Close the key" data-tip="Close the key" aria-label="Close">X</button>
+          </div>
+          <div class="help-content">
+            <section class="help-section">
+              <h3>Top Bar</h3>
+              <dl class="key-list">
+                <div><dt>Canvas menu</dt><dd>Switch between saved canvases.</dd></div>
+                <div><dt>New Canvas</dt><dd>Create a blank canvas while keeping previous canvases saved.</dd></div>
+                <div><dt>Templates</dt><dd>Create a new canvas from a production starter layout.</dd></div>
+                <div><dt>Bible</dt><dd>Open project-wide continuity rules for characters, locations, props, and style.</dd></div>
+                <div><dt>Undo</dt><dd>Reverse the last canvas edit.</dd></div>
+                <div><dt>Shots</dt><dd>Open the shot navigator and jump to sections, shots, workflows, or missing pieces.</dd></div>
+                <div><dt>Find</dt><dd>Search titles, tags, prompts, notes, URLs, and attached assets.</dd></div>
+                <div><dt>Batch</dt><dd>Apply one status or shared tags to every selected card.</dd></div>
+                <div><dt>History</dt><dd>Save or restore named checkpoints before major edits.</dd></div>
+                <div><dt>Save</dt><dd>Save the current canvas locally.</dd></div>
+                <div><dt>Export</dt><dd>Export Markdown, storyboard HTML, or project JSON.</dd></div>
+                <div><dt>[]</dt><dd>Fit the whole board into view.</dd></div>
+              </dl>
+            </section>
+
+            <section class="help-section">
+              <h3>Tool Rail</h3>
+              <dl class="key-list compact">
+                <div><dt>Cursor</dt><dd>Select, lasso, connect, and move cards.</dd></div>
+                <div><dt>Hand</dt><dd>Pan around the canvas without selecting, lassoing, or moving cards.</dd></div>
+                <div><dt>V</dt><dd>Add an Image to Video workflow card.</dd></div>
+                <div><dt>I</dt><dd>Add a Generate Image workflow card.</dd></div>
+                <div><dt>S</dt><dd>Add a shot card.</dd></div>
+                <div><dt>C</dt><dd>Add a character reference card.</dd></div>
+                <div><dt>R</dt><dd>Add a scene reference card.</dd></div>
+                <div><dt>G</dt><dd>Add a movable section frame for grouping a scene or sequence.</dd></div>
+                <div><dt>P</dt><dd>Add a placeholder for a missing asset, prompt, audio file, or approval.</dd></div>
+                <div><dt>N</dt><dd>Add an inspiration card for reusable prompt fragments and tone ideas.</dd></div>
+                <div><dt>Y</dt><dd>Add a video style/tone reference area.</dd></div>
+                <div><dt>M</dt><dd>Add a music/audio reference area.</dd></div>
+                <div><dt>T</dt><dd>Add a text note.</dd></div>
+                <div><dt>L</dt><dd>Add a video, music, or general reference link.</dd></div>
+                <div><dt>U</dt><dd>Upload image, video, or audio files.</dd></div>
+              </dl>
+            </section>
+
+            <section class="help-section">
+              <h3>Canvas</h3>
+              <dl class="key-list">
+                <div><dt>Cursor mode</dt><dd>Drag empty space to lasso-select cards; drag cards to move them.</dd></div>
+                <div><dt>Hand mode</dt><dd>Drag anywhere on the board, including over cards, to pan.</dd></div>
+                <div><dt>Space/Shift drag</dt><dd>Temporarily pan around the board while staying in cursor mode.</dd></div>
+                <div><dt>Mouse wheel</dt><dd>Zoom in or out.</dd></div>
+                <div><dt>Drag selected card</dt><dd>Move one card or the whole selected group.</dd></div>
+                <div><dt>Side dots</dt><dd>Drag from either left or right dot to either side of another card.</dd></div>
+                <div><dt>Section frame</dt><dd>Drag a section to move the cards fully inside it with the frame.</dd></div>
+                <div><dt>Panel edges</dt><dd>Drag the divider beside Assets or Inspector to resize the canvas space.</dd></div>
+                <div><dt>Delete / Backspace</dt><dd>Delete the selected card.</dd></div>
+                <div><dt>Overview</dt><dd>Use the bottom-right minimap to jump around large boards.</dd></div>
+              </dl>
+            </section>
+
+            <section class="help-section">
+              <h3>Inspector</h3>
+              <dl class="key-list">
+                <div><dt>Image cards</dt><dd>Add prompts and negative prompts for individual images or references.</dd></div>
+                <div><dt>Scene cards</dt><dd>Add overall scene description, style direction, and music/sound direction.</dd></div>
+                <div><dt>Placeholders</dt><dd>Describe what is missing and mark it resolved when an asset or decision is attached.</dd></div>
+                <div><dt>Readiness</dt><dd>Use the checklist to see what each card still needs before handoff.</dd></div>
+                <div><dt>Style/Music cards</dt><dd>Add a URL, choose an existing asset, or upload a video/audio file directly to the card.</dd></div>
+                <div><dt>Workflow cards</dt><dd>Set provider, model, duration, start/end frames, and generation prompt.</dd></div>
+                <div><dt>Attempts</dt><dd>Log generation outputs, winning versions, rejected versions, seeds, and notes.</dd></div>
+                <div><dt>Review notes</dt><dd>Track decisions, owners, and client/editor comments on any card.</dd></div>
+                <div><dt>Close button</dt><dd>Hide the inspector without deleting the selected card.</dd></div>
+                <div><dt>Asset Size</dt><dd>Use Size in the Assets panel to switch between small, medium, and large asset cards.</dd></div>
+                <div><dt>Inbox</dt><dd>Filter newly imported assets that still need to be sorted into the canvas.</dd></div>
+                <div><dt>Asset filters</dt><dd>Use All, Storyboard Images, Video Generations, Music, and Style References to narrow the asset drawer.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

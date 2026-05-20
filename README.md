@@ -1,0 +1,77 @@
+# Master Canvas
+
+Local-first pre-production canvas for planning AI video projects. Arrange images, prompts, references, music notes, shot order, and generation handoffs on a visual board.
+
+Master Canvas ships without bundled demo projects, private media, or sample user assets. New users start with a blank local canvas.
+
+## Features
+
+- Infinite visual canvas with zoom, pan, lasso selection, grouping, and node connections.
+- Local asset library for images, video, audio, links, style references, and music references.
+- Per-shot prompts, negative prompts, lenses, lighting, camera movement, action, sound notes, and review notes.
+- Handoff exports for Markdown, JSON, visual storyboard HTML, storyboard PDF, and a ZIP package for agents/operators.
+- Handoff ZIP includes Hermes Agent context, ComfyUI/LTX job JSON, Kling/Veo prompt sheets, source assets, shot order CSV, and scene bin plan.
+- Local-first storage in the user's browser/Electron app. No account or cloud service is required.
+
+## Privacy
+
+All project data is stored locally in the user's browser or desktop app storage. The app does not include a backend and does not upload files anywhere. Exported ZIP/PDF/HTML/JSON files are created locally by the user.
+
+## Web App
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite.
+
+## Desktop App
+
+```bash
+npm install
+npm run desktop
+```
+
+Package a desktop build:
+
+```bash
+npm run desktop:dir
+```
+
+Create distributable installers:
+
+```bash
+npm run desktop:dist
+```
+
+Installer output is written to `release/`.
+
+For unsigned local builds on macOS, use `npm run desktop:dir`. For public distribution, sign and notarize the macOS app with your own Apple Developer ID.
+
+More details:
+
+- [Usage Guide](docs/USAGE.md)
+- [Desktop Packaging](docs/DESKTOP.md)
+- [Release Guide](docs/RELEASES.md)
+- [Hermes Plugin](docs/HERMES.md)
+
+## Publishing To GitHub
+
+This repository is set up to start from a blank canvas. Demo/private project assets are not required for the app to run.
+
+Recommended before publishing:
+
+- Add screenshots or a short demo GIF.
+- Decide whether packaged releases should be built manually or through GitHub Actions.
+- Keep private project handoff ZIPs out of the repo.
+
+## Hermes Agent Plugin
+
+A starter native Hermes plugin lives in:
+
+```text
+plugins/mastercanvas-hermes
+```
+
+It lets Hermes inspect/extract Master Canvas handoff ZIPs and turn them into a ComfyUI/LTX execution plan. Copy that folder into `~/.hermes/plugins/master-canvas` and restart Hermes.

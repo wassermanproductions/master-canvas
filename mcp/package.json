@@ -1,0 +1,13 @@
+{
+  "name": "master-canvas-mcp",
+  "version": "1.0.0",
+  "description": "Headless MCP stdio server for Master Canvas — read and edit a Master Canvas project (boards, cards, prompts, references, shot order, assets) and build generator-ready handoff packages from Hermes, Claude Code, Codex, or any MCP client, without the desktop app.",
+  "type": "module",
+  "bin": { "master-canvas-mcp": "./master-canvas-mcp.mjs" },
+  "engines": { "node": ">=18" },
+  "author": "Sam Wasserman (https://wassermanproductions.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/wassermanproductions/master-canvas-mcp",
+  "repository": { "type": "git", "url": "https://github.com/wassermanproductions/master-canvas-mcp.git" },
+  "keywords": ["mcp", "model-context-protocol", "master-canvas", "pre-production", "storyboard", "handoff", "comfyui", "hermes", "filmmaking"]
+}

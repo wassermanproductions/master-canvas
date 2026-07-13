@@ -75,6 +75,17 @@ Recommended before publishing:
 - Decide whether packaged releases should be built manually or through GitHub Actions.
 - Keep private project handoff ZIPs out of the repo.
 
+## Agent control (MCP)
+
+Any MCP agent — **Hermes, Claude Code, Codex, or any other MCP client** — can read and edit a Master Canvas project (boards, cards, prompts, references, shot order, assets) and build generator-ready handoff packages **headlessly**, without the desktop app. It operates on the app's exported `master-canvas-project.json` (export from the app → let the agent work → re-import). The server lives in [`mcp/`](mcp/) here and is also published standalone as [**master-canvas-mcp**](https://github.com/wassermanproductions/master-canvas-mcp).
+
+```bash
+# Claude Code
+claude mcp add master-canvas -- node /absolute/path/to/master-canvas/mcp/master-canvas-mcp.mjs
+```
+
+See [`mcp/README.md`](mcp/README.md) for the full tool list and Hermes/Codex/generic setup.
+
 ## Hermes Agent Plugin
 
 A starter native Hermes plugin lives in:

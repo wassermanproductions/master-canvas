@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="Master Canvas" width="360">
+</p>
+
 # Master Canvas
 
 Local-first pre-production canvas for planning AI video projects. Arrange images, prompts, references, music notes, shot order, and generation handoffs on a visual board.

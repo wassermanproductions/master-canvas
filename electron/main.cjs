@@ -1,8 +1,20 @@
-const { app, BrowserWindow, Menu, shell } = require("electron");
+const { app, BrowserWindow, Menu, shell, nativeImage } = require("electron");
 const path = require("node:path");
+const fs = require("node:fs");
 
 const isDev = Boolean(process.env.VITE_DEV_SERVER_URL);
 let aboutWindow = null;
+
+const APP_ICON_PATH = path.join(__dirname, "..", "build", "icon.png");
+
+// Small logo embedded into the About window (read once, base64 data URI).
+let aboutLogoDataUri = "";
+try {
+  const bytes = fs.readFileSync(path.join(__dirname, "about-logo.png"));
+  aboutLogoDataUri = `data:image/png;base64,${bytes.toString("base64")}`;
+} catch {
+  aboutLogoDataUri = "";
+}
 
 const aboutDetails = {
   name: "Master Canvas",
@@ -96,16 +108,11 @@ function showAboutWindow(parent) {
             text-align: center;
           }
           .mark {
-            display: inline-grid;
-            width: 54px;
-            height: 54px;
+            display: block;
+            width: 72px;
+            height: 72px;
             margin: 0 auto;
-            place-items: center;
-            border: 1px solid #161510;
-            background: #161510;
-            color: #f6f3ec;
-            font-weight: 800;
-            letter-spacing: 0;
+            border-radius: 16px;
           }
           h1 {
             margin: 0;
@@ -143,7 +150,7 @@ function showAboutWindow(parent) {
       </head>
       <body>
         <main>
-          <div class="mark">MC</div>
+          ${aboutLogoDataUri ? `<img class="mark" src="${aboutLogoDataUri}" alt="${escHtml(aboutDetails.name)}" />` : `<div class="mark"></div>`}
           <h1>${escHtml(aboutDetails.name)}</h1>
           <p>Developed by <strong>${escHtml(aboutDetails.developer)}</strong>.</p>
           <div class="links">
@@ -243,6 +250,7 @@ function createWindow() {
     minHeight: 720,
     title: "Master Canvas",
     backgroundColor: "#f6f3ec",
+    icon: APP_ICON_PATH,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -264,6 +272,13 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Dock icon for `npm run desktop` dev runs (packaged mac builds use build/icon.icns).
+  if (process.platform === "darwin" && app.dock) {
+    try {
+      const img = nativeImage.createFromPath(APP_ICON_PATH);
+      if (!img.isEmpty()) app.dock.setIcon(img);
+    } catch {}
+  }
   configureAboutMetadata();
   createApplicationMenu();
   createWindow();

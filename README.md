@@ -10,6 +10,16 @@ Developed by Sam Wasserman: [WassermanProductions.com](https://wassermanproducti
 
 Master Canvas ships without bundled demo projects, private media, or sample user assets. New users start with a blank local canvas.
 
+## Install (macOS)
+
+Apple Silicon (M1–M4):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wassermanproductions/master-canvas/main/install.sh | bash
+```
+
+This downloads the latest release, installs Master Canvas to Applications, and launches it. Intel Macs can build from source (see [Desktop App](#desktop-app)).
+
 ## Preview
 
 These screenshots show an example production board with assets, shot cards, prompts, references, handoff readiness, the movable help key, and the minimap overview. The app itself starts blank for new users.

@@ -2,6 +2,13 @@
   <img src="docs/logo.png" alt="Master Canvas" width="360">
 </p>
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/wassermanproductions/master-canvas?include_prereleases&label=download" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/platforms-macOS-2f7bf6" alt="Platforms">
+  <a href="https://ko-fi.com/samwasserman"><img src="https://img.shields.io/badge/Ko--fi-support%20Sam%20Wasserman-ff5e5b?logo=kofi&logoColor=white" alt="Support Sam Wasserman on Ko-fi"></a>
+</p>
+
 # Master Canvas
 
 Local-first pre-production canvas for planning AI video projects. Arrange images, prompts, references, music notes, shot order, and generation handoffs on a visual board.
